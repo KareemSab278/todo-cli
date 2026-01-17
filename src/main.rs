@@ -8,9 +8,8 @@
 
 // still learning rust, dont judge me pls
 
-#[derive(Debug)]
-
-enum Status{
+#[derive(Debug, Copy, Clone)] // easy copying like when in loop
+enum Status {
     Pending,
     Completed,
 }
@@ -49,8 +48,20 @@ impl ToDo {
 fn main() {
     let mut todos: Vec<ToDo> = vec![];
 
-    ToDo::add_todo(&mut todos, "Learn Rust".to_string(), "2026-01-16".to_string(), 1, Status::Pending);
-    ToDo::add_todo(&mut todos, "Build CLI app".to_string(), "2026-01-16".to_string(), 2, Status::Pending);
+    ToDo::add_todo(
+        &mut todos,
+        "Learn Rust".to_string(),
+        "2026-01-16".to_string(),
+        1,
+        Status::Pending
+    );
+    ToDo::add_todo(
+        &mut todos,
+        "Build CLI app".to_string(),
+        "2026-01-16".to_string(),
+        2,
+        Status::Pending
+    );
     println!("All todos:");
     ToDo::list_todos(&todos);
 
