@@ -7,7 +7,7 @@
 // i want to implement enums for todo status (e.g., Pending, Completed)
 
 // still learning rust, dont judge me pls
-
+use chrono::{ Utc, DateTime }; // for curr time/date
 #[derive(Debug, Copy, Clone)] // easy copying like when in loop
 enum Status {
     Pending,
@@ -22,8 +22,10 @@ struct ToDo {
 }
 
 impl ToDo {
-    fn add_todo(todos: &mut Vec<ToDo>, note: String, timestamp: String, id: i32, status: Status) {
-        todos.push(ToDo { note, timestamp, id, status });
+    fn add_todo(todos: &mut Vec<ToDo>, note: String, id: i32, status: Status) {
+        // let curr_time: DateTime<Utc> = Utc::now();
+        let timestamp: DateTime<Utc> = Utc::now();
+        todos.push(ToDo { note, timestamp: timestamp.to_string(), id, status });
     }
 
     fn update_status(todos: &mut Vec<ToDo>, id: i32, new_status: Status) {
@@ -38,6 +40,16 @@ impl ToDo {
         todos.retain(|todo| todo.id != id);
     }
 
+    fn edit_todo(todos: &mut Vec<ToDo>, new_note: String, id: i32) {
+        let timestamp: DateTime<Utc> = Utc::now();
+        for todo in todos.iter_mut() {
+            if todo.id == id {
+                todo.note = new_note.to_string();
+                todo.timestamp = timestamp.to_string();
+            }
+        }
+    }
+
     fn list_todos(todos: &Vec<ToDo>) {
         for todo in todos {
             println!("{}: {} [{}] - {:?}", todo.id, todo.note, todo.timestamp, todo.status);
@@ -48,29 +60,7 @@ impl ToDo {
 fn main() {
     let mut todos: Vec<ToDo> = vec![];
 
-    ToDo::add_todo(
-        &mut todos,
-        "Learn Rust".to_string(),
-        "2026-01-16".to_string(),
-        1,
-        Status::Pending
-    );
-    ToDo::add_todo(
-        &mut todos,
-        "Build CLI app".to_string(),
-        "2026-01-16".to_string(),
-        2,
-        Status::Pending
-    );
-    println!("All todos:");
-    ToDo::list_todos(&todos);
+    ToDo::add_todo(&mut todos, "first to do".to_string(), 1, Status::Pending);
 
-    ToDo::remove_todo(&mut todos, 1);
-
-    println!("After removal:");
-    ToDo::list_todos(&todos);
-
-    ToDo::update_status(&mut todos, 2, Status::Completed);
-    println!("After updating status:");
     ToDo::list_todos(&todos);
 }
